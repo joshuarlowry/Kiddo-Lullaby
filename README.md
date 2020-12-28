@@ -9,10 +9,12 @@ So, if for example, you want to have one set of lullabies playing in room A and 
 You must have a Spotify account, Amazon account, and an Echo. They must be linked.
 
 ## Setup
-First, setup your local environment variables
+First, setup your local environment variables on your machine. They will be passed during the docker run command. 
 SPOTIPY_CLIENT_ID
 SPOTIPY_CLIENT_SECRET
-SPOTIPY_REDIRECT_URI
+SPOTIPY_REDIRECT_URI = http://localhost:5000
+
+/Don't forget to set up the callback url in your Spotify account./
 
 Authentication setup should be run using the following command:
 ```
