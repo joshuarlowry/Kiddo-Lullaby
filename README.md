@@ -8,3 +8,9 @@ So, if for example, you want to have one set of lullabies playing in room A and 
 ## Assumptions
 You must have a Spotify account, Amazon account, and an Echo. They must be linked.
 
+## Resources
+Node Web API for Spotify
+https://github.com/thelinmichael/spotify-web-api-node
+
+Getting Started with Docker using Node JS
+https://www.docker.com/blog/getting-started-with-docker-using-node-jspart-i/

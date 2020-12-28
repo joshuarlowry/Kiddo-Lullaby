@@ -1,0 +1,23 @@
+{
+  "name": "KiddoLullaby",
+  "version": "1.0.0",
+  "description": "This app will help parents (and grandparents) manage music in the kid's rooms specifically targeted at nap/bed time. This includes triggering specific playlists or songs and changing the volume. There may be other uses.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuarlowry/Kiddo-Lullaby.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshuarlowry/Kiddo-Lullaby/issues"
+  },
+  "homepage": "https://github.com/joshuarlowry/Kiddo-Lullaby#readme",
+  "dependencies": {
+    "spotify-web-api-node": "^5.0.0"
+  }
+}
