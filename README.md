@@ -14,7 +14,7 @@ SPOTIPY_CLIENT_ID
 SPOTIPY_CLIENT_SECRET
 SPOTIPY_REDIRECT_URI = http://localhost:5000
 
-/Don't forget to set up the callback url in your Spotify account./
+__Don't forget to set up the callback url in your Spotify account.__
 
 Authentication setup should be run using the following command:
 ```
