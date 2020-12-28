@@ -6,11 +6,15 @@ FROM python:3.8
 #Create a working directory
 WORKDIR /app
 
+COPY requirements.txt .
+COPY .cache .
+
 #install Spotipy
-pip install spotipy --upgrade
+RUN pip install -r requirements.txt
 
 #We should have an image that is based on version 14.15.3 with the relevant dependencies from our package
 #Copy the files into the image
-COPY . .
+COPY src/ .
 
 #Run the server
+CMD [ "python", "./server.py"]
