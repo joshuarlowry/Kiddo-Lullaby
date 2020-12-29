@@ -1,5 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import time
 
 def play(contextUri):
     print(("About to start playing {0} on device {1}.").format(contextUri,deviceID))
@@ -33,7 +34,11 @@ scope = "user-read-private user-read-email user-read-playback-state user-modify-
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 deviceID = getActiveDevice()
 heyTiger = ['spotify:track:2WOM5LEDprdaJ6V6gnFK0Z']
+marching = 'spotify:playlist:0ibeKGFzDV4bbqENRNrcf8'
 nowPlaying()
 playSong(heyTiger)
+nowPlaying()
+time.sleep(30)
+play(marching)
 nowPlaying()
 
