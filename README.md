@@ -1,3 +1,6 @@
+# Current Status
+The app runs in a docker container, changes the song to Hey Tiger by David Arnold, waits 30 seconds, then changes to a Marching Band / Drumline Cadences playlist. 
+
 # Kiddo-Lullaby
 This app will help parents (and grandparents) manage music in the kid's rooms specifically targeted at nap/bed time. This includes triggering specific playlists or songs and changing the volume. There may be other uses. 
 
