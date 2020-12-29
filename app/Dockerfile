@@ -1,4 +1,5 @@
 #https://www.docker.com/blog/containerized-python-development-part-1/
+#https://flask.palletsprojects.com/en/1.1.x/tutorial/deploy/ 
 
 #Use Python 3.8
 FROM python:3.8
