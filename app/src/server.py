@@ -1,5 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from airium import Airium
 from flask import Flask, redirect, url_for
 server = Flask(__name__)
 
@@ -41,7 +42,19 @@ def authenticationRoutine():
 @server.route("/")
 def index():
     sp, deviceID = authenticationRoutine()
-    return nowPlaying(sp)
+    a = Airium()
+    a('<!DOCTYPE html>')
+    with a.html(lang="pl"):
+        with a.head():
+            a.meta(charset="utf-8")
+            a.title(_t="Kiddo-Lullaby Home")
+        with a.body():
+            with a.h3(id="id23409231", klass='main_header'):
+                a("Now Playing")
+            with a.p(id="idNowPlaying", klass='now_playing'):
+                a(nowPlaying(sp))
+    html = str(a)
+    return html
 
 @server.route("/chill")
 def chill():
