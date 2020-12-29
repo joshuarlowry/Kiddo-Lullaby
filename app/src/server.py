@@ -21,7 +21,8 @@ def nowPlaying():
 def getActiveDevice():
     devices = sp.devices()
     activeDevice = devices['devices'][0]['id']
-    for device in enumerate(devices['devices']):
+    # note, idx is used to store the index of the returned tuple. 
+    for idx, device in enumerate(devices['devices']):
         print(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
         if(device['is_active']):
             activeDevice = device['id']
@@ -36,9 +37,9 @@ deviceID = getActiveDevice()
 heyTiger = ['spotify:track:2WOM5LEDprdaJ6V6gnFK0Z']
 marching = 'spotify:playlist:0ibeKGFzDV4bbqENRNrcf8'
 nowPlaying()
-playSong(heyTiger)
-nowPlaying()
-time.sleep(30)
-play(marching)
-nowPlaying()
+# playSong(heyTiger)
+# nowPlaying()
+# time.sleep(30)
+# play(marching)
+# nowPlaying()
 
