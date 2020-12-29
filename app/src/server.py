@@ -51,7 +51,7 @@ def chill():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-   server.run(host='localhost')
+   server.run(host='0.0.0.0')
 
 #Authentication
 # scope = "user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative user-library-read"
