@@ -42,6 +42,7 @@ def authenticationRoutine():
 @server.route("/")
 def index():
     sp, deviceID = authenticationRoutine()
+    playingNow = sp.current_playback()
     a = Airium()
     a('<!DOCTYPE html>')
     with a.html(lang="pl"):
@@ -51,6 +52,8 @@ def index():
         with a.body():
             with a.h3(id="id23409231", klass='main_header'):
                 a("Now Playing")
+            with a.div():
+                a.img(src=playingNow['item']['album']['images'][1]['url'], alt=nowPlaying(sp))
             with a.p(id="idNowPlaying", klass='now_playing'):
                 a(nowPlaying(sp))
     html = str(a)
