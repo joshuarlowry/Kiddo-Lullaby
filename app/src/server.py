@@ -56,6 +56,15 @@ def index():
                 a.img(src=playingNow['item']['album']['images'][1]['url'], alt=nowPlaying(sp))
             with a.p(id="idNowPlaying", klass='now_playing'):
                 a(nowPlaying(sp))
+            with a.div():
+                with a.ul():
+                    with a.li():
+                        with a.a(href='/tiger'):
+                            a("Play Hey Tiger! by Robbie Williams")
+                    with a.li():
+                        with a.a('a', href='/chill'):
+                            a("Play chill music playlist")
+            
     html = str(a)
     return html
 
