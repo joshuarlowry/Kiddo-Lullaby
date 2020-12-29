@@ -43,6 +43,7 @@ def authenticationRoutine():
 def index():
     sp, deviceID = authenticationRoutine()
     playingNow = sp.current_playback()
+    devices = sp.devices()
     a = Airium()
     a('<!DOCTYPE html>')
     with a.html(lang="pl"):
@@ -65,6 +66,11 @@ def index():
                     with a.li():
                         with a.a('a', href='/chill'):
                             a("Play chill music playlist")
+            with a.div():
+                with a.ul():
+                    for idx, device in enumerate(devices['devices']):
+                        with a.li():
+                            a(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
             
     html = str(a)
     return html
