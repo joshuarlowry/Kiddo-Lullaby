@@ -67,8 +67,14 @@ def index():
                         with a.a(href='/abc'):
                             a("Play Abc Song by Wheels on the Bus")
                     with a.li():
+                        with a.a(href="/twinkeTwinkle"):
+                            a("Play Twinkle Twinkle Little Star by Super Simple Songs")
+                    with a.li():
+                        with a.a(href="/sleepyPiano"):
+                            a("Play Sleepy Piano Playlist")
+                    with a.li():
                         with a.a('a', href='/chill'):
-                            a("Play chill music playlist")
+                            a("Play Chill Music Playlist")
             with a.div():
                 with a.ul():
                     for idx, device in enumerate(devices['devices']):
@@ -104,6 +110,13 @@ def sleepyPiano():
     sp, deviceID = authenticationRoutine()
     #Play Sleepy Piano Playlist
     play(sp,deviceID,"spotify:playlist:37i9dQZF1DX03b46zi3S82")
+    return redirect(url_for("index"))
+
+@server.route("/twinkeTwinkle")
+def twinkleTwinkle():
+    sp, deviceID = authenticationRoutine()
+    #Play Twinkle Twinkle Little Star by Super Simple Songs
+    playSong(sp,deviceID,["spotify:album:2T9jkpdjKDjzoOqPfaCAMu"])
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
