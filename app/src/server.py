@@ -99,5 +99,12 @@ def abc():
     playSong(sp,deviceID,["spotify:track:3kd7YGbHbuDQzASBgtVt3h"])
     return redirect(url_for("index"))
 
+@server.route("/sleepyPiano")
+def abc():
+    sp, deviceID = authenticationRoutine()
+    #Play Sleepy Piano Playlist
+    play(sp,deviceID,"spotify:playlist:37i9dQZF1DX03b46zi3S82")
+    return redirect(url_for("index"))
+
 if __name__ == "__main__":
    server.run(host='0.0.0.0')
