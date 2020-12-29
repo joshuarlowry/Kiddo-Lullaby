@@ -64,6 +64,9 @@ def index():
                         with a.a(href='/tiger'):
                             a("Play Hey Tiger! by Robbie Williams")
                     with a.li():
+                        with a.a(href='/abc'):
+                            a("Play Abc Song by Wheels on the Bus")
+                    with a.li():
                         with a.a('a', href='/chill'):
                             a("Play chill music playlist")
             with a.div():
@@ -85,8 +88,15 @@ def chill():
 @server.route("/tiger")
 def tiger():
     sp, deviceID = authenticationRoutine()
-    #Play Hey Tiger!
+    #Play Hey Tiger! by Robbie Williams
     playSong(sp,deviceID,["spotify:track:2WOM5LEDprdaJ6V6gnFK0Z"])
+    return redirect(url_for("index"))
+
+@server.route("/abc")
+def abc():
+    sp, deviceID = authenticationRoutine()
+    #Play Abc Song by Wheels on the Bus
+    playSong(sp,deviceID,["spotify:track:3kd7YGbHbuDQzASBgtVt3h"])
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
