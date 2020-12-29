@@ -50,6 +50,13 @@ def chill():
     play(sp,deviceID,'spotify:playlist:6jUXWvAQhTMFyPECJGJmoX')
     return redirect(url_for("index"))
 
+@server.route("/tiger")
+def tiger():
+    sp, deviceID = authenticationRoutine()
+    #Play Hey Tiger!
+    playSong(sp,deviceID,["spotify:track:2WOM5LEDprdaJ6V6gnFK0Z"])
+    return redirect(url_for("index"))
+
 if __name__ == "__main__":
    server.run(host='0.0.0.0')
 
