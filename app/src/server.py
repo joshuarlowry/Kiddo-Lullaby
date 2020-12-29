@@ -50,12 +50,13 @@ def index():
             a.meta(charset="utf-8")
             a.title(_t="Kiddo-Lullaby Home")
         with a.body():
-            with a.h3(id="id23409231", klass='main_header'):
-                a("Now Playing")
-            with a.div():
-                a.img(src=playingNow['item']['album']['images'][1]['url'], alt=nowPlaying(sp))
-            with a.p(id="idNowPlaying", klass='now_playing'):
-                a(nowPlaying(sp))
+            if playingNow is not None:
+                with a.h3(id="id23409231", klass='main_header'):
+                    a("Now Playing")
+                with a.div():
+                    a.img(src=playingNow['item']['album']['images'][1]['url'], alt=nowPlaying(sp))
+                with a.p(id="idNowPlaying", klass='now_playing'):
+                    a(nowPlaying(sp))
             with a.div():
                 with a.ul():
                     with a.li():
