@@ -37,9 +37,12 @@ docker run -e SPOTIPY_CLIENT_ID -e SPOTIPY_CLIENT_SECRET -e SPOTIPY_REDIRECT_URI
 ```
 
 
-## Dev Note
+# Dev Notes
 During dev, I'm running this string of commands between changes. Contact me if you know of a better way.
 ```
 docker stop kiddoDev; docker build -t kiddolullaby .; docker rm kiddoDev;  docker run -e SPOTIPY_CLIENT_ID -e SPOTIPY_CLIENT_SECRET -e SPOTIPY_REDIRECT_URI -p 5000:5000 --name kiddoDev kiddolullaby
 kiddoDev
 ```
+
+# Attributions
+This project is built on top of Spotipy. https://github.com/plamere/spotipy
