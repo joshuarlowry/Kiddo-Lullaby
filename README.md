@@ -1,5 +1,6 @@
 # Current Status
-The app runs in a docker container, changes the song to Hey Tiger by David Arnold, waits 30 seconds, then changes to a Marching Band / Drumline Cadences playlist. 
+The app runs in a docker container, visiting / will show you the current song. 
+Visiting /chill will play a Low-Fi-Chill playlist and redirect you to /. 
 
 # Kiddo-Lullaby
 This app will help parents (and grandparents) manage music in the kid's rooms specifically targeted at nap/bed time. This includes triggering specific playlists or songs and changing the volume. There may be other uses. 
@@ -33,4 +34,12 @@ docker build -t kiddolullaby .
 Run your docker container
 ```
 docker run -e SPOTIPY_CLIENT_ID -e SPOTIPY_CLIENT_SECRET -e SPOTIPY_REDIRECT_URI -p 5000:5000 kiddolullaby
+```
+
+
+## Dev Note
+During dev, I'm running this string of commands between changes. Contact me if you know of a better way.
+```
+docker stop kiddoDev; docker build -t kiddolullaby .; docker rm kiddoDev;  docker run -e SPOTIPY_CLIENT_ID -e SPOTIPY_CLIENT_SECRET -e SPOTIPY_REDIRECT_URI -p 5000:5000 --name kiddoDev kiddolullaby
+kiddoDev
 ```
