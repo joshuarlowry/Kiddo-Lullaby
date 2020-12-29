@@ -116,7 +116,7 @@ def sleepyPiano():
 def twinkleTwinkle():
     sp, deviceID = authenticationRoutine()
     #Play Twinkle Twinkle Little Star by Super Simple Songs
-    playSong(sp,deviceID,["spotify:album:2T9jkpdjKDjzoOqPfaCAMu"])
+    playSong(sp,deviceID,["spotify:track:3N6kzbnfpTPB5J9NAGc1rU"])
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
