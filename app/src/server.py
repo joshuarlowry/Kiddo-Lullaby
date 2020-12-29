@@ -61,6 +61,14 @@ def index():
             with a.div():
                 with a.ul():
                     with a.li():
+                        with a.a(href='/tooLoud'):
+                            a("Make Quiet")
+                    with a.li():
+                        with a.a(href='/tooQuiet'):
+                            a("Make Loud")
+            with a.div():
+                with a.ul():
+                    with a.li():
                         with a.a(href='/tiger'):
                             a("Play Hey Tiger! by Robbie Williams")
                     with a.li():
@@ -117,6 +125,18 @@ def twinkleTwinkle():
     sp, deviceID = authenticationRoutine()
     #Play Twinkle Twinkle Little Star by Super Simple Songs
     playSong(sp,deviceID,["spotify:track:3N6kzbnfpTPB5J9NAGc1rU"])
+    return redirect(url_for("index"))
+
+@server.route("/tooLoud")
+def tooLoud():
+    sp, deviceID = authenticationRoutine()
+    sp.volume(25, deviceID)
+    return redirect(url_for("index"))
+
+@server.route("/tooQuiet")
+def tooQuiet():
+    sp, deviceID = authenticationRoutine()
+    sp.volume(50, deviceID)
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
