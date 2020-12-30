@@ -1,0 +1,14 @@
+body {
+    background-color: #202725;
+}
+
+#title {
+    background-color: #a0bdcc;
+    color: #202725;
+    overflow: hidden;
+}
+
+.w3-btn {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}

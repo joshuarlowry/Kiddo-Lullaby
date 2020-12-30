@@ -49,8 +49,13 @@ def index():
     with a.html(lang="pl"):
         with a.head():
             a.meta(charset="utf-8")
+            a.link(href="https://www.w3schools.com/w3css/4/w3.css", rel='stylesheet', type='text/css')
+            a.link(href="static/font-awesome-4.7.0/css/font-awesome.min.css")
+            a.link(href='static/home.css?q=12', rel='stylesheet', type='text/css')
             a.title(_t="Kiddo-Lullaby Home")
         with a.body():
+            with a.h1(id="title", klass='title_header'):
+                a("Kiddo Lullaby")
             if playingNow is not None:
                 with a.h3(id="id23409231", klass='main_header'):
                     a("Now Playing")
@@ -61,10 +66,10 @@ def index():
                 with a.div():
                     with a.ul():
                         with a.li():
-                            with a.a(href="/pause"):
+                            with a.a(href="/pause", klass="w3-btn w3-black"):
                                 a("Pause")
                         with a.li():
-                            with a.a(href="/resume"):
+                            with a.a(href="/resume", klass="w3-btn w3-black"):
                                 a("Resume")
             with a.div():
                 with a.ul():
@@ -77,19 +82,19 @@ def index():
             with a.div():
                 with a.ul():
                     with a.li():
-                        with a.a(href='/tiger'):
+                        with a.a(href='/tiger', klass="w3-btn w3-block w3-indigo"):
                             a("Play Hey Tiger! by Robbie Williams")
                     with a.li():
-                        with a.a(href='/abc'):
+                        with a.a(href='/abc', klass="w3-btn w3-block w3-indigo"):
                             a("Play Abc Song by Wheels on the Bus")
                     with a.li():
-                        with a.a(href="/twinkeTwinkle"):
+                        with a.a(href="/twinkeTwinkle", klass="w3-btn w3-block w3-indigo"):
                             a("Play Twinkle Twinkle Little Star by Super Simple Songs")
                     with a.li():
-                        with a.a(href="/sleepyPiano"):
+                        with a.a(href="/sleepyPiano", klass="w3-btn w3-block w3-indigo"):
                             a("Play Sleepy Piano Playlist")
                     with a.li():
-                        with a.a('a', href='/chill'):
+                        with a.a('a', href='/chill', klass="w3-btn w3-block w3-indigo"):
                             a("Play Chill Music Playlist")
             if devices is not None:
                 with a.div():
