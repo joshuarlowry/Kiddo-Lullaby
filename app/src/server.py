@@ -5,21 +5,21 @@ from flask import Flask, redirect, url_for
 server = Flask(__name__)
 
 def play(sp, deviceID, contextUri):
-    print(("About to start playing {0} on device {1}.").format(contextUri,deviceID))
+    #print(("About to start playing {0} on device {1}.").format(contextUri,deviceID))
     sp.start_playback(device_id=deviceID,context_uri=contextUri)
 
 def playSong(sp, deviceID, uris):
-    print(("About to start playing {0} on device {1}.").format(uris,deviceID))
+    #print(("About to start playing {0} on device {1}.").format(uris,deviceID))
     sp.start_playback(device_id=deviceID,uris=uris)
     sp.repeat('context',deviceID)
 
 def nowPlaying(sp):
     now = sp.current_playback()
-    print(("Playing on {0}").format(now['device']['name']))
+    #print(("Playing on {0}").format(now['device']['name']))
     track = now['item']['name']
     artists = now['item']['album']['artists'][0]
     returnString = ("Playing {0} by {1}").format(track, artists['name'])
-    print(returnString)
+    #print(returnString)
     return returnString
 
 def getActiveDevice(sp):
@@ -27,10 +27,10 @@ def getActiveDevice(sp):
     activeDevice = devices['devices'][0]['id']
     # note, idx is used to store the index of the returned tuple. 
     for idx, device in enumerate(devices['devices']):
-        print(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
+        #print(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
         if(device['is_active']):
             activeDevice = device['id']
-            print("Assigning active device.")
+            #print("Assigning active device.")
     return activeDevice
 
 def authenticationRoutine():
@@ -63,6 +63,9 @@ def index():
                         with a.li():
                             with a.a(href="/pause"):
                                 a("Pause")
+                        with a.li():
+                            with a.a(href="/resume"):
+                                a("Resume")
             with a.div():
                 with a.ul():
                     with a.li():
@@ -149,6 +152,12 @@ def tooQuiet():
 def pause():
     sp, deviceID = authenticationRoutine()
     sp.pause_playback(deviceID)
+    return redirect(url_for("index"))
+
+@server.route("/resume")
+def resume():
+    sp, deviceID = authenticationRoutine()
+    sp.start_playback()
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
