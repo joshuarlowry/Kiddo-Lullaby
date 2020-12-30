@@ -1,6 +1,9 @@
 # Current Status
-The app runs in a docker container, visiting / will show you the current song. 
-Visiting /chill will play a Low-Fi-Chill playlist and redirect you to /. 
+The app runs in a docker container, visiting / will show you the current song and a premade list of potential things to play (focused on my need for now). 
+You can pause and resume from the controls at the top.
+You can make it quiet (25%) and loud (50%). 
+
+Note, Strange things happen if the device is suddenly unavailable. Will need to think about that. 
 
 # Kiddo-Lullaby
 This app will help parents (and grandparents) manage music in the kid's rooms specifically targeted at nap/bed time. This includes triggering specific playlists or songs and changing the volume. There may be other uses. 
@@ -12,7 +15,9 @@ There is a complexity around the Spotify/Amazon/Echo setup that makes control co
 So, if for example, you want to have one set of lullabies playing in room A and another set playing in room B you will need two Amazon Accounts, two (or more) Echos, and two Spotify Accounts. We will call each combination of Amazon Account, Echo, and Spotify Account linked a "zone". This app will hopefully allow you to configure a "page" for these zones for you to control. 
 
 ## Assumptions
-You must have a Spotify account, Amazon account, and an Echo. They must be linked.
+For the core purpose of this app, you must have a Spotify account, Amazon account, and an Echo. They must be linked. This code works without an Amazon account or an Echo, but that is the means through which I plan to play. I created a dedicated Amazon/Spotify account and linked the Echo. This means that that spotify account only sees one device. 
+
+For each Spotify account, I plan to run a separate docker container and Spotify app api, unless I find some way to have multiple linked accounts to a single app. 
 
 ## Setup
 First, setup your local environment variables on your machine. They will be passed during the docker run command. 
@@ -20,31 +25,34 @@ SPOTIPY_CLIENT_ID
 SPOTIPY_CLIENT_SECRET
 SPOTIPY_REDIRECT_URI = http://localhost:5000
 
-__Don't forget to set up the callback url in your Spotify account.__
+*Don't forget to set up the callback url in your Spotify account.*
 
 Authentication setup should be run using the following command:
 ```
 python setup.py
 ```
-If you have not authenticated before your browser will open to authenticate
+__If you have not authenticated before your browser will open to authenticate__
 Once authentication is completed, the .cache file will contain your key.
 Build your docker container, the .cache file will be copied
 ```
 docker build -t kiddolullaby .
 ```
-
-Run your docker container
+Run your docker container by manually sending the Client ID, Secret, and Redirect, or by passing the ones in your environment.
+```
+docker run -e SPOTIPY_CLIENT_ID=<ClientID> -e SPOTIPY_CLIENT_SECRET=<ClientSecret> -e SPOTIPY_REDIRECT_URI=<RedirectUrl> -p 5000:5000 kiddolullaby
+```
+Pass the Client ID, Secret, and Redirect from your environment.
 ```
 docker run -e SPOTIPY_CLIENT_ID -e SPOTIPY_CLIENT_SECRET -e SPOTIPY_REDIRECT_URI -p 5000:5000 kiddolullaby
 ```
 
-
 # Dev Notes
+
 During dev, I'm running this string of commands between changes. Contact me if you know of a better way.
 ```
 docker stop kiddoDev; docker build -t kiddolullaby .; docker rm kiddoDev;  docker run -e SPOTIPY_CLIENT_ID -e SPOTIPY_CLIENT_SECRET -e SPOTIPY_REDIRECT_URI -p 5000:5000 --name kiddoDev kiddolullaby
 kiddoDev
 ```
-
-# Attributions
+# Attributions and dependencies
 This project is built on top of Spotipy. https://github.com/plamere/spotipy
+It is also using Flask. https://flask.palletsprojects.com/en/1.1.x/
