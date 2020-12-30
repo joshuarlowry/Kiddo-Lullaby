@@ -58,6 +58,11 @@ def index():
                     a.img(src=playingNow['item']['album']['images'][1]['url'], alt=nowPlaying(sp))
                 with a.p(id="idNowPlaying", klass='now_playing'):
                     a(nowPlaying(sp))
+                with a.div():
+                    with a.ul():
+                        with a.li():
+                            with a.a(href="/pause"):
+                                a("Pause")
             with a.div():
                 with a.ul():
                     with a.li():
@@ -83,11 +88,12 @@ def index():
                     with a.li():
                         with a.a('a', href='/chill'):
                             a("Play Chill Music Playlist")
-            with a.div():
-                with a.ul():
-                    for idx, device in enumerate(devices['devices']):
-                        with a.li():
-                            a(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
+            if devices is not None:
+                with a.div():
+                    with a.ul():
+                        for idx, device in enumerate(devices['devices']):
+                            with a.li():
+                                a(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
             
     html = str(a)
     return html
@@ -137,6 +143,12 @@ def tooLoud():
 def tooQuiet():
     sp, deviceID = authenticationRoutine()
     sp.volume(50, deviceID)
+    return redirect(url_for("index"))
+
+@server.route("/pause")
+def pause():
+    sp, deviceID = authenticationRoutine()
+    sp.pause_playback(deviceID)
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
