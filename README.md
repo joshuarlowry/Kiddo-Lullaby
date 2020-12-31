@@ -1,7 +1,9 @@
 # Current Status
 The app runs in a docker container, visiting / will show you the current song and a premade list of potential things to play (focused on my need for now). 
-You can pause and resume from the controls at the top.
-You can make it quiet (25%) and loud (50%). 
+
+Lots of styling enhancements.
+There are now icon buttons for play/pause and only one is shown based on the context of the music. 
+There are buttons for the tracks now.
 
 Note, Strange things happen if the device is suddenly unavailable. Will need to think about that. 
 
@@ -56,3 +58,5 @@ kiddoDev
 # Attributions and dependencies
 This project is built on top of Spotipy. https://github.com/plamere/spotipy
 It is also using Flask. https://flask.palletsprojects.com/en/1.1.x/
+We are now using FontAwesome. https://fontawesome.com
+Some styling help on buttons from w3Schools. https://www.w3schools.com/w3css/w3css_buttons.asp 
