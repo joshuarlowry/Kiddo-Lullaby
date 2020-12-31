@@ -6,9 +6,38 @@ body {
     background-color: #a0bdcc;
     color: #202725;
     overflow: hidden;
+    margin-top: 0;
+    padding-left: 36px;
 }
 
 .w3-btn {
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-right: 8px;
+    margin-bottom: 19px;
+    color: #D1DEDE;
+}
+
+ul.linked-list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.button-box {
+    width: 650px;
+    margin-left: 36px;
+}
+.button-link {
+    font-size: x-large;
+}
+
+.now-playing {
+    color: #D1DEDE;
+}
+
+.main-header {
+    color: #D1DEDE;
+}
+
+.now-playing-card {
+    margin-left: 36px;
 }

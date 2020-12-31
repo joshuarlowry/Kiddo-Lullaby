@@ -50,58 +50,52 @@ def index():
         with a.head():
             a.meta(charset="utf-8")
             a.link(href="https://www.w3schools.com/w3css/4/w3.css", rel='stylesheet', type='text/css')
-            a.link(href="static/font-awesome-4.7.0/css/font-awesome.min.css")
-            a.link(href='static/home.css?q=12', rel='stylesheet', type='text/css')
+            a.link(href="static/font-awesome-4.7.0/css/font-awesome.min.css", rel='stylesheet', type='text/css')
+            a.link(href='static/home.css?q=33', rel='stylesheet', type='text/css')
             a.title(_t="Kiddo-Lullaby Home")
         with a.body():
             with a.h1(id="title", klass='title_header'):
                 a("Kiddo Lullaby")
             if playingNow is not None:
-                with a.h3(id="id23409231", klass='main_header'):
-                    a("Now Playing")
-                with a.div():
+                with a.div(klass="now-playing-card"):
+                    with a.h3(id="id23409231", klass='main-header'):
+                        a("Now Playing")
                     a.img(src=playingNow['item']['album']['images'][1]['url'], alt=nowPlaying(sp))
-                with a.p(id="idNowPlaying", klass='now_playing'):
-                    a(nowPlaying(sp))
-                with a.div():
-                    with a.ul():
-                        with a.li():
-                            with a.a(href="/pause", klass="w3-btn w3-black"):
-                                a("Pause")
-                        with a.li():
-                            with a.a(href="/resume", klass="w3-btn w3-black"):
-                                a("Resume")
-            with a.div():
-                with a.ul():
+                    with a.p(id="idNowPlaying", klass='now-playing'):
+                        a(nowPlaying(sp))
+                    with a.div():
+                        with a.a(href="/pause", klass="w3-btn"):
+                            a.i(klass="fa fa-pause fa-4x")
+                        with a.a(href="/resume", klass="w3-btn"):
+                            a.i(klass="fa fa-play fa-4x")
+                        with a.a(href='/tooLoud', klass="w3-btn"):
+                            a.i(klass="fa fa-volume-down fa-4x")
+                        with a.a(href='/tooQuiet', klass="w3-btn"):
+                            a.i(klass="fa fa-volume-up fa-4x")
+            with a.div(klass="button-box"):
+                with a.ul(klass="linked-list"):
                     with a.li():
-                        with a.a(href='/tooLoud'):
-                            a("Make Quiet")
+                        with a.a(href='/tiger', klass="w3-btn w3-block w3-indigo button-link"):
+                            a("Hey Tiger! by Robbie Williams")
                     with a.li():
-                        with a.a(href='/tooQuiet'):
-                            a("Make Loud")
-            with a.div():
-                with a.ul():
+                        with a.a(href='/abc', klass="w3-btn w3-block w3-indigo button-link"):
+                            a("Abc Song by Wheels on the Bus")
                     with a.li():
-                        with a.a(href='/tiger', klass="w3-btn w3-block w3-indigo"):
-                            a("Play Hey Tiger! by Robbie Williams")
+                        with a.a(href="/twinkeTwinkle", klass="w3-btn w3-block w3-indigo button-link"):
+                            a("Twinkle Twinkle Little Star by Super Simple Songs")
                     with a.li():
-                        with a.a(href='/abc', klass="w3-btn w3-block w3-indigo"):
-                            a("Play Abc Song by Wheels on the Bus")
+                        with a.a(href="/sleepyPiano", klass="w3-btn w3-block w3-indigo button-link"):
+                            a("Sleepy Piano Playlist")
                     with a.li():
-                        with a.a(href="/twinkeTwinkle", klass="w3-btn w3-block w3-indigo"):
-                            a("Play Twinkle Twinkle Little Star by Super Simple Songs")
-                    with a.li():
-                        with a.a(href="/sleepyPiano", klass="w3-btn w3-block w3-indigo"):
-                            a("Play Sleepy Piano Playlist")
-                    with a.li():
-                        with a.a('a', href='/chill', klass="w3-btn w3-block w3-indigo"):
-                            a("Play Chill Music Playlist")
-            if devices is not None:
-                with a.div():
-                    with a.ul():
-                        for idx, device in enumerate(devices['devices']):
-                            with a.li():
-                                a(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
+                        with a.a('a', href='/chill', klass="w3-btn w3-block w3-indigo button-link"):
+                            a("Chill Music Playlist")
+            #This is for debugging. :)
+            #  if devices is not None:
+            #     with a.div():
+            #         with a.ul():
+            #             for idx, device in enumerate(devices['devices']):
+            #                 with a.li():
+            #                     a(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
             
     html = str(a)
     return html
@@ -166,4 +160,4 @@ def resume():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-   server.run(host='0.0.0.0')
+   server.run(host='0.0.0.0', debug=True)
