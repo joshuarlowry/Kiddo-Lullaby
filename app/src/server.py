@@ -64,10 +64,12 @@ def index():
                     with a.p(id="idNowPlaying", klass='now-playing'):
                         a(nowPlaying(sp))
                     with a.div():
-                        with a.a(href="/pause", klass="w3-btn"):
-                            a.i(klass="fa fa-pause fa-4x")
-                        with a.a(href="/resume", klass="w3-btn"):
-                            a.i(klass="fa fa-play fa-4x")
+                        if playingNow['is_playing']:
+                            with a.a(href="/pause", klass="w3-btn"):
+                                a.i(klass="fa fa-pause fa-4x")
+                        else:
+                            with a.a(href="/resume", klass="w3-btn"):
+                                a.i(klass="fa fa-play fa-4x")
                         with a.a(href='/tooLoud', klass="w3-btn"):
                             a.i(klass="fa fa-volume-down fa-4x")
                         with a.a(href='/tooQuiet', klass="w3-btn"):
@@ -89,13 +91,19 @@ def index():
                     with a.li():
                         with a.a('a', href='/chill', klass="w3-btn w3-block w3-indigo button-link"):
                             a("Chill Music Playlist")
-            #This is for debugging. :)
+            # This is for debugging devices.
+            #
             #  if devices is not None:
             #     with a.div():
             #         with a.ul():
             #             for idx, device in enumerate(devices['devices']):
             #                 with a.li():
             #                     a(("{0}, {1} - {2}").format(device['id'],device['name'],device['is_active']))
+
+            # This is for debugging Now PLaying.
+            #
+            # with a.div():
+            #     a(("is_playing: {0}").format(playingNow['is_playing']))
             
     html = str(a)
     return html
