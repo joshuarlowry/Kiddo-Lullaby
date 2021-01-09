@@ -5,6 +5,10 @@ Lots of styling enhancements.
 There are now icon buttons for play/pause and only one is shown based on the context of the music. 
 There are buttons for the tracks now.
 
+Current Screenshot of the app.
+
+<img src="https://github.com/joshuarlowry/Kiddo-Lullaby/blob/main/images/Screenshot1.png" width="250px" alt="Screenshot showing the album art, Play/Pause button, Volume Low and High, as well as a list of playlists as buttons."/>
+
 Note, Strange things happen if the device is suddenly unavailable. Will need to think about that. 
 
 # Kiddo-Lullaby
