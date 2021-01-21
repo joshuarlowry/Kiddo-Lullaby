@@ -2,7 +2,7 @@
 #https://flask.palletsprojects.com/en/1.1.x/tutorial/deploy/ 
 
 #Use Python 3.8
-FROM python:3.8
+FROM python:3.8-alpine
 
 #Create a working directory
 WORKDIR /app
