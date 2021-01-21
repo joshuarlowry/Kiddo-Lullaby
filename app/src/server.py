@@ -1,3 +1,4 @@
+import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from airium import Airium
@@ -66,7 +67,7 @@ def authenticationRoutine():
     Returns the spotipy spotify object.
     '''
     scope = "user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative user-library-read"
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, cache_path=os.environ['CACHE_PATH']))
     deviceID = getActiveDevice(sp)
     return sp, deviceID
 

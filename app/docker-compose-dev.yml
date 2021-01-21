@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+  kiddoDev:
+    build: .
+    image: kiddoLullaby
+    container_name: kiddoDev
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../kiddoDev:/config
+    env_file: kiddoDev.env
