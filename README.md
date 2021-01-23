@@ -59,6 +59,16 @@ During dev, I'm running this string of commands between changes. Contact me if y
 docker stop kiddoDev; docker build -t kiddolullaby .; docker rm kiddoDev;  docker run -e SPOTIPY_CLIENT_ID -e SPOTIPY_CLIENT_SECRET -e SPOTIPY_REDIRECT_URI -p 5000:5000 --name kiddoDev kiddolullaby
 kiddoDev
 ```
+
+Build
+```
+docker-compose -f docker-compose-dev.yml --verbose build
+```
+
+Turn it on
+```
+docker-compose -f docker-compose-dev.yml up -d
+```
 # Attributions and dependencies
 This project is built on top of Spotipy. https://github.com/plamere/spotipy
 It is also using Flask. https://flask.palletsprojects.com/en/1.1.x/
