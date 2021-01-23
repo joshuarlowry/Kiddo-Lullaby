@@ -1,8 +1,7 @@
 version: "3.4"
 
 services:
-  kiddoLullaby1:
-    image: kiddoLullaby
+  kiddolullaby1:
     container_name: kiddoLullaby1
     restart: unless-stopped
     ports:
