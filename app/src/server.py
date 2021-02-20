@@ -1,8 +1,7 @@
 import os
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 from airium import Airium
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, request
 server = Flask(__name__)
 
 def play(sp, deviceID, contextUri):
@@ -63,20 +62,47 @@ def getActiveDeviceName(sp):
 def authenticationRoutine():
     '''
     Authenticates with Spotify using the stored auth (or attempts to authorize manually).
-    Must have a browser and user interaction to start new authentication.
-    Returns the spotipy spotify object.
+    Returns the auth manager
     '''
     scope = "user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative user-library-read"
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, cache_path=os.environ['CACHE_PATH']))
-    deviceID = getActiveDevice(sp)
-    return sp, deviceID
+    return spotipy.oauth2.SpotifyOAuth(scope=scope, show_dialog=True)
+
+def checkAuthentication():
+    '''
+    Make sure we have a valid cached token otherwise redirect back to /.
+    Returns the authorized spotipy object
+    '''
+    auth_manager = authenticationRoutine()
+    if not auth_manager.get_cached_token():
+        return redirect('/')
+    return spotipy.Spotify(auth_manager=auth_manager)
+
+@server.route("/callback")
+def callback():
+    '''
+    Spotify returns you to here for auth. 
+    You must have /callback at the end of your SPOTIPY_REDIRECT_URI
+    '''
+    auth_manager = authenticationRoutine()
+    auth_manager.get_access_token(request.args.get("code"))
+    return redirect('/')
 
 @server.route("/")
 def index():
     '''
+    Try to authenticate, but if the cache is missing then provide sign-in link.
+    Otherwise, load the whole interface :)
+    '''
+    auth_manager = authenticationRoutine()
+    if not auth_manager.get_cached_token():
+        auth_url = auth_manager.get_authorize_url()
+        return f'<h2><a href="{auth_url}">Sign in</a></h2>'
+    
+    '''
     The home page. html generated in here, could probably be more elegant and use Flask for real.
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = spotipy.Spotify(auth_manager=auth_manager)
+    deviceID = getActiveDevice(sp)
     playingNow = sp.current_playback()
     devices = sp.devices()
     activeDeviceName = getActiveDeviceName(sp)
@@ -154,7 +180,8 @@ def playlist(id):
     Enables you to play a playlist directly using the spotify ID (enables ad-hoc playlists instead of hard routes of /chill /tiger etc.)
     localhost:5000/playlist/37i9dQZF1E8U54MaF9DPlR
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)
     play(sp, deviceID,'spotify:playlist:'+id)
     return redirect(url_for("index"))
 
@@ -164,7 +191,8 @@ def track(id):
     Enables you to play a specific song directly using the spotify ID
     localhost:5000/track/2WOM5LEDprdaJ6V6gnFK0Z
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)
     playSong(sp, deviceID, ['spotify:track:'+id])
     return redirect(url_for("index"))
 
@@ -173,7 +201,8 @@ def chill():
     '''
     Play Low-Fi - Chill Lofi / Hip Hop Radio - Lo Fi Beats to Chill, Study, Sleep to, 3:30 a.m. Playlist
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)
     play(sp,deviceID,'spotify:playlist:6jUXWvAQhTMFyPECJGJmoX')
     return redirect(url_for("index"))
 
@@ -182,7 +211,8 @@ def tiger():
     '''
     Play Hey Tiger! by Robbie Williams
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)
     playSong(sp,deviceID,["spotify:track:2WOM5LEDprdaJ6V6gnFK0Z"])
     return redirect(url_for("index"))
 
@@ -191,7 +221,8 @@ def abc():
     '''
     Play Abc Song by Wheels on the Bus
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)
     playSong(sp,deviceID,["spotify:track:3kd7YGbHbuDQzASBgtVt3h"])
     return redirect(url_for("index"))
 
@@ -200,7 +231,8 @@ def sleepyPiano():
     '''
     Play Sleepy Piano Playlist
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)
     play(sp,deviceID,"spotify:playlist:37i9dQZF1DX03b46zi3S82")
     return redirect(url_for("index"))
 
@@ -209,7 +241,8 @@ def twinkleTwinkle():
     '''
     Play Twinkle Twinkle Little Star by Super Simple Songs
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)
     playSong(sp,deviceID,["spotify:track:3N6kzbnfpTPB5J9NAGc1rU"])
     return redirect(url_for("index"))
 
@@ -218,7 +251,8 @@ def tooLoud():
     '''
     Sets audio to 25. This is generally below the volume threshold for baby monitor.
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)    
     sp.volume(25, deviceID)
     return redirect(url_for("index"))
 
@@ -227,7 +261,8 @@ def tooQuiet():
     '''
     Sets audio to 50. This is above threshold for baby monitor, but is more immersive.
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)    
     sp.volume(50, deviceID)
     return redirect(url_for("index"))
 
@@ -236,7 +271,8 @@ def pause():
     '''
     Pause the active playing track.
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)    
     sp.pause_playback(deviceID)
     return redirect(url_for("index"))
 
@@ -245,7 +281,8 @@ def resume():
     '''
     Resume the track on the device retrieved from the nowPlaying().
     '''
-    sp, deviceID = authenticationRoutine()
+    sp = checkAuthentication()
+    deviceID = getActiveDevice(sp)    
     sp.start_playback()
     return redirect(url_for("index"))
 
