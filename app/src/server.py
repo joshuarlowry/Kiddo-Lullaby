@@ -148,6 +148,26 @@ def index():
     html = str(a)
     return html
 
+@server.route("/playlist/<id>")
+def playlist(id):
+    '''
+    Enables you to play a playlist directly using the spotify ID (enables ad-hoc playlists instead of hard routes of /chill /tiger etc.)
+    localhost:5000/playlist/37i9dQZF1E8U54MaF9DPlR
+    '''
+    sp, deviceID = authenticationRoutine()
+    play(sp, deviceID,'spotify:playlist:'+id)
+    return redirect(url_for("index"))
+
+@server.route("/track/<id>")
+def track(id):
+    '''
+    Enables you to play a specific song directly using the spotify ID
+    localhost:5000/track/2WOM5LEDprdaJ6V6gnFK0Z
+    '''
+    sp, deviceID = authenticationRoutine()
+    playSong(sp, deviceID, ['spotify:track:'+id])
+    return redirect(url_for("index"))
+
 @server.route("/chill")
 def chill():
     '''
