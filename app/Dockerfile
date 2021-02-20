@@ -17,7 +17,6 @@ RUN pip install -r requirements.txt
 COPY src/ .
 
 VOLUME /config
-ENV CACHE_PATH=/config/.cache
 
 #Run the server
 CMD [ "python", "./server.py"]
