@@ -1,5 +1,3 @@
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/joshuarlowry/Kiddo-Lullaby)
-
 # Current Status
 The app runs in a docker container, visiting / will show you the current song and a premade list of potential things to play (focused on my need for now). 
 
