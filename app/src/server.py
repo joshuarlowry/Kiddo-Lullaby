@@ -1,8 +1,18 @@
 import os
 import spotipy
+import json
 from airium import Airium
 from flask import Flask, redirect, url_for, request
 server = Flask(__name__)
+
+playlist = {
+    "2WOM5LEDprdaJ6V6gnFK0Z":"track",
+    "3kd7YGbHbuDQzASBgtVt3h":"track",
+    "3N6kzbnfpTPB5J9NAGc1rU":"track",
+    "6jUXWvAQhTMFyPECJGJmoX":"playlist",
+    "37i9dQZF1DX03b46zi3S82":"playlist",
+    "37i9dQZF1E8U54MaF9DPlR":"playlist"
+}
 
 def play(sp, deviceID, contextUri):
     '''
@@ -24,11 +34,13 @@ def nowPlaying(sp):
     This returns the "<track> by <artist name>" string for the active track.
     '''
     now = sp.current_playback()
-    #print(("Playing on {0}").format(now['device']['name']))
-    track = now['item']['name']
-    artists = now['item']['album']['artists'][0]
-    returnString = ("{0} by {1}").format(track, artists['name'])
-    #print(returnString)
+    returnString = ""
+    try:
+        track = now['item']['name']
+        artists = now['item']['album']['artists'][0]
+        returnString = ("{0} by {1}").format(track, artists['name'])
+    except:
+        returnString = "UNKNOWN"
     return returnString
 
 def getActiveDevice(sp):
@@ -46,6 +58,9 @@ def getActiveDevice(sp):
             #print("Assigning active device.")
     return activeDevice
 
+def getTrack(sp, track_id):
+    return sp.track(track_id)
+
 def getActiveDeviceName(sp):
     '''
     This returns the name of the active device is there is one.
@@ -59,13 +74,37 @@ def getActiveDeviceName(sp):
             return device['name']
     return ""
 
+def getAlbumArt(playingNow):
+    '''
+    return the medium album art url
+    '''
+    art = ""
+    try:
+        art = playingNow['item']['album']['images'][1]['url']
+    except:
+        art = ""
+    
+    return art
+
+def getAlbumArtSmall(playingNow):
+    '''
+    return the small album art url
+    '''
+    art = ""
+    try:
+        art = playingNow['album']['images'][2]['url']
+    except:
+        art = ""
+    
+    return art
+
 def authenticationRoutine():
     '''
     Authenticates with Spotify using the stored auth (or attempts to authorize manually).
     Returns the auth manager
     '''
-    scope = "user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative user-library-read"
-    return spotipy.oauth2.SpotifyOAuth(scope=scope, show_dialog=True)
+    scope = "user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative user-library-read user-read-recently-played"
+    return spotipy.oauth2.SpotifyOAuth(scope=scope, show_dialog=True, cache_path="./config")
 
 def checkAuthentication():
     '''
@@ -84,7 +123,7 @@ def callback():
     You must have /callback at the end of your SPOTIPY_REDIRECT_URI
     '''
     auth_manager = authenticationRoutine()
-    auth_manager.get_access_token(request.args.get("code"))
+    auth_manager.get_access_token(code=request.args.get("code"),as_dict=False,check_cache=True)
     return redirect('/')
 
 @server.route("/")
@@ -106,6 +145,10 @@ def index():
     playingNow = sp.current_playback()
     devices = sp.devices()
     activeDeviceName = getActiveDeviceName(sp)
+    recentlyPlayed = sp.current_user_recently_played()
+
+    heyTiger = getTrack(sp, "2WOM5LEDprdaJ6V6gnFK0Z")
+
     a = Airium()
     a('<!DOCTYPE html>')
     with a.html(lang="pl"):
@@ -126,7 +169,7 @@ def index():
                 with a.div(klass="now-playing-card"):
                     with a.h3(id="id23409231", klass='main-header'):
                         a("Now Playing")
-                    a.img(src=playingNow['item']['album']['images'][1]['url'], alt=nowPlaying(sp))
+                    a.img(src=getAlbumArt(playingNow), alt=nowPlaying(sp))
                     with a.p(id="idNowPlaying", klass='now-playing'):
                         a(("Playing {0}").format(nowPlaying(sp)))
                     with a.div():
@@ -157,6 +200,12 @@ def index():
                     with a.li():
                         with a.a('a', href='/chill', klass="w3-btn w3-block w3-indigo button-link"):
                             a("Chill Music Playlist")
+            with a.div(klass="button-box"):
+                with a.ul(klass="linked-list"):
+                    with a.li():
+                        with a.a(href='/track/'+heyTiger['id'], klass="w3-btn w3-block w3-indigo button-link"):
+                            a.img(src=getAlbumArtSmall(heyTiger), alt=heyTiger['name'])
+                            a(heyTiger['name'])
             # This is for debugging devices.
             #
             #  if devices is not None:
@@ -172,6 +221,8 @@ def index():
             #     a(("is_playing: {0}").format(playingNow['is_playing']))
             
     html = str(a)
+    #html += json.dumps(recentlyPlayed)
+    #html += json.dumps(heyTiger)
     return html
 
 @server.route("/playlist/<id>")
