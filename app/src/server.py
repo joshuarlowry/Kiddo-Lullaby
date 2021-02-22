@@ -5,15 +5,6 @@ from airium import Airium
 from flask import Flask, redirect, url_for, request
 server = Flask(__name__)
 
-playlist = {
-    "2WOM5LEDprdaJ6V6gnFK0Z":"track",
-    "3kd7YGbHbuDQzASBgtVt3h":"track",
-    "3N6kzbnfpTPB5J9NAGc1rU":"track",
-    "6jUXWvAQhTMFyPECJGJmoX":"playlist",
-    "37i9dQZF1DX03b46zi3S82":"playlist",
-    "37i9dQZF1E8U54MaF9DPlR":"playlist"
-}
-
 def play(sp, deviceID, contextUri):
     '''
     Plays a playlist or an album. contextUri is a single string.
@@ -60,6 +51,8 @@ def getActiveDevice(sp):
 
 def getTrack(sp, track_id):
     return sp.track(track_id)
+def getPlaylist(sp, playlist_id):
+    return sp.playlist(playlist_id)
 
 def getActiveDeviceName(sp):
     '''
@@ -132,6 +125,7 @@ def index():
     Try to authenticate, but if the cache is missing then provide sign-in link.
     Otherwise, load the whole interface :)
     '''
+    dbug=""
     auth_manager = authenticationRoutine()
     if not auth_manager.get_cached_token():
         auth_url = auth_manager.get_authorize_url()
@@ -140,6 +134,15 @@ def index():
     '''
     The home page. html generated in here, could probably be more elegant and use Flask for real.
     '''
+    playlist = {
+        "spotify:track:2WOM5LEDprdaJ6V6gnFK0Z":"track",
+        "spotify:track:3kd7YGbHbuDQzASBgtVt3h":"track",
+        "spotify:track:3N6kzbnfpTPB5J9NAGc1rU":"track",
+        "spotify:playlist:6jUXWvAQhTMFyPECJGJmoX":"playlist",
+        "spotify:playlist:37i9dQZF1DX03b46zi3S82":"playlist",
+        "spotify:playlist:37i9dQZF1E8U54MaF9DPlR":"playlist"
+    }
+
     sp = spotipy.Spotify(auth_manager=auth_manager)
     deviceID = getActiveDevice(sp)
     playingNow = sp.current_playback()
@@ -186,26 +189,19 @@ def index():
             with a.div(klass="button-box"):
                 with a.ul(klass="linked-list"):
                     with a.li():
-                        with a.a(href='/tiger', klass="w3-btn w3-block w3-indigo button-link"):
-                            a("Hey Tiger! by Robbie Williams")
-                    with a.li():
-                        with a.a(href='/abc', klass="w3-btn w3-block w3-indigo button-link"):
-                            a("Abc Song by Wheels on the Bus")
-                    with a.li():
-                        with a.a(href="/twinkeTwinkle", klass="w3-btn w3-block w3-indigo button-link"):
-                            a("Twinkle Twinkle Little Star by Super Simple Songs")
-                    with a.li():
-                        with a.a(href="/sleepyPiano", klass="w3-btn w3-block w3-indigo button-link"):
-                            a("Sleepy Piano Playlist")
-                    with a.li():
-                        with a.a('a', href='/chill', klass="w3-btn w3-block w3-indigo button-link"):
-                            a("Chill Music Playlist")
-            with a.div(klass="button-box"):
-                with a.ul(klass="linked-list"):
-                    with a.li():
-                        with a.a(href='/track/'+heyTiger['id'], klass="w3-btn w3-block w3-indigo button-link"):
-                            a.img(src=getAlbumArtSmall(heyTiger), alt=heyTiger['name'])
-                            a(heyTiger['name'])
+                        for (id, typ) in playlist.items():
+                            if typ == 'playlist':
+                                spData = getPlaylist(sp, id)
+                                smAlbumArt = spData['images'][0]['url']
+                                with a.a(href='/'+typ+'/'+spData['id'], klass="w3-btn w3-block w3-indigo button-link"):
+                                    a.img(src=smAlbumArt, alt=spData['name'], width="64", height="64")
+                                    a(spData['name'])
+                            elif typ == 'track':
+                                spData = getTrack(sp, id)
+                                smAlbumArt = getAlbumArtSmall(spData)
+                                with a.a(href='/'+typ+'/'+spData['id'], klass="w3-btn w3-block w3-indigo button-link"):
+                                    a.img(src=smAlbumArt, alt=spData['name'], width="64", height="64")
+                                    a(spData['name'])
             # This is for debugging devices.
             #
             #  if devices is not None:
@@ -223,6 +219,7 @@ def index():
     html = str(a)
     #html += json.dumps(recentlyPlayed)
     #html += json.dumps(heyTiger)
+    html += dbug
     return html
 
 @server.route("/playlist/<id>")
