@@ -73,10 +73,20 @@ def getAlbumArt(playingNow):
     '''
     art = ""
     try:
-        art = playingNow['item']['album']['images'][1]['url']
+        art = playingNow['item']['album']['images'][0]['url']
     except:
         art = ""
     
+    return art
+def getAlbumArtMedium(playingNow):
+    '''
+    return the medium album art url
+    '''
+    art = ""
+    try:
+        art = playingNow['album']['images'][1]['url']
+    except:
+        art = ""
     return art
 
 def getAlbumArtSmall(playingNow):
@@ -129,7 +139,21 @@ def index():
     auth_manager = authenticationRoutine()
     if not auth_manager.get_cached_token():
         auth_url = auth_manager.get_authorize_url()
-        return f'<h2><a href="{auth_url}">Sign in</a></h2>'
+        a = Airium()
+        a('<!DOCTYPE html>')
+        with a.html(lang="pl"):
+            with a.head():
+                a.meta(charset="utf-8")
+                a.link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl", crossorigin="anonymous")
+                a.link(href="static/font-awesome-4.7.0/css/font-awesome.min.css", rel='stylesheet', type='text/css')
+                a.link(href='static/home.css?q=33', rel='stylesheet', type='text/css')
+                a.title(_t="Kiddo-Lullaby Home")
+            with a.body():
+                with a.a(href=auth_url, klass="btn btn-primary"):
+                    a.h2(_t="Sign in")
+        html = str(a)
+        html += dbug
+        return html
     
     '''
     The home page. html generated in here, could probably be more elegant and use Flask for real.
@@ -150,14 +174,12 @@ def index():
     activeDeviceName = getActiveDeviceName(sp)
     recentlyPlayed = sp.current_user_recently_played()
 
-    heyTiger = getTrack(sp, "2WOM5LEDprdaJ6V6gnFK0Z")
-
     a = Airium()
     a('<!DOCTYPE html>')
     with a.html(lang="pl"):
         with a.head():
             a.meta(charset="utf-8")
-            a.link(href="https://www.w3schools.com/w3css/4/w3.css", rel='stylesheet', type='text/css')
+            a.link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl", crossorigin="anonymous")
             a.link(href="static/font-awesome-4.7.0/css/font-awesome.min.css", rel='stylesheet', type='text/css')
             a.link(href='static/home.css?q=33', rel='stylesheet', type='text/css')
             a.title(_t="Kiddo-Lullaby Home")
@@ -177,31 +199,32 @@ def index():
                         a(("Playing {0}").format(nowPlaying(sp)))
                     with a.div():
                         if playingNow['is_playing']:
-                            with a.a(href="/pause", klass="w3-btn"):
+                            with a.a(href="/pause", klass="btn btn-dark"):
                                 a.i(klass="fa fa-pause fa-4x")
                         else:
-                            with a.a(href="/resume", klass="w3-btn"):
+                            with a.a(href="/resume", klass="btn btn-dark"):
                                 a.i(klass="fa fa-play fa-4x")
-                        with a.a(href='/tooLoud', klass="w3-btn"):
+                        with a.a(href='/tooLoud', klass="btn btn-dark"):
                             a.i(klass="fa fa-volume-down fa-4x")
-                        with a.a(href='/tooQuiet', klass="w3-btn"):
+                        with a.a(href='/tooQuiet', klass="btn btn-dark"):
                             a.i(klass="fa fa-volume-up fa-4x")
-            with a.div(klass="button-box"):
-                with a.ul(klass="linked-list"):
+            with a.div():
+                with a.ul(klass="list-group"):
                     with a.li():
                         for (id, typ) in playlist.items():
-                            if typ == 'playlist':
-                                spData = getPlaylist(sp, id)
-                                smAlbumArt = spData['images'][0]['url']
-                                with a.a(href='/'+typ+'/'+spData['id'], klass="w3-btn w3-block w3-indigo button-link"):
-                                    a.img(src=smAlbumArt, alt=spData['name'], width="64", height="64")
-                                    a(spData['name'])
-                            elif typ == 'track':
-                                spData = getTrack(sp, id)
-                                smAlbumArt = getAlbumArtSmall(spData)
-                                with a.a(href='/'+typ+'/'+spData['id'], klass="w3-btn w3-block w3-indigo button-link"):
-                                    a.img(src=smAlbumArt, alt=spData['name'], width="64", height="64")
-                                    a(spData['name'])
+                                    if typ == 'playlist':
+                                        spData = getPlaylist(sp, id)
+                                        albumArt = spData['images'][0]['url']
+                                    elif typ == 'track':
+                                        spData = getTrack(sp, id)
+                                        albumArt = getAlbumArtMedium(spData)
+                                    with a.a(href='/'+typ+'/'+spData['id'], klass="list-group-item list-group-item-action list-group-item-dark flex-column align-items-start"):
+                                        with a.div(klass="row g-0"):
+                                            with a.div(klass="col-md-4"):
+                                                a.img(src=albumArt, alt=spData['name'], width="200px")
+                                            with a.div(klass="col-md-8"):
+                                                with a.div(klass="card-body"):
+                                                    a.h2(_t=spData['name'], klass="card-title")
             # This is for debugging devices.
             #
             #  if devices is not None:
@@ -217,8 +240,6 @@ def index():
             #     a(("is_playing: {0}").format(playingNow['is_playing']))
             
     html = str(a)
-    #html += json.dumps(recentlyPlayed)
-    #html += json.dumps(heyTiger)
     html += dbug
     return html
 

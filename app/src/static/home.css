@@ -10,24 +10,20 @@ body {
     padding-left: 36px;
 }
 
-.w3-btn {
-    margin-right: 8px;
-    margin-bottom: 19px;
-    color: #D1DEDE;
-}
-
 ul.linked-list{
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.button-box {
-    width: 650px;
-    margin-left: 36px;
+.card {
+    background-color: #2b2a2d;
 }
-.button-link {
-    font-size: x-large;
+
+.list-group-item {
+    margin: 10px 0px;
+    background-color: #2b2a2d;
+    color: #D1DEDE;
 }
 
 .now-playing {
