@@ -220,7 +220,7 @@ def index():
                                         albumArt = getAlbumArtMedium(spData)
                                     with a.a(href='/'+typ+'/'+spData['id'], klass="list-group-item list-group-item-action list-group-item-dark flex-column align-items-start"):
                                         with a.div(klass="row g-0"):
-                                            with a.div(klass="col-md-4"):
+                                            with a.div(klass="col-md-3"):
                                                 a.img(src=albumArt, alt=spData['name'], width="200px")
                                             with a.div(klass="col-md-8"):
                                                 with a.div(klass="card-body"):
